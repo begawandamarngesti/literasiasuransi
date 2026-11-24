@@ -190,7 +190,31 @@ h1{color:#ffd23f;-webkit-text-stroke:2px #1b1340;paint-order:stroke fill;text-sh
 #panel .of .mt{flex:1}#panel .of .nm{text-align:right;margin-left:auto}#panel .of.none{justify-content:flex-start;margin-top:12px}
 #panel .ch small{font-size:11px;line-height:1.35}
 @media (max-width:700px){.cols{grid-template-columns:1fr}}
-</style></head><body>
+</style><style>
+#admin{max-width:1500px}
+#admin .ag{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.sl{text-align:left}.slh{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.slh .acash{margin:0;flex:none}
+.slS{position:relative;margin:8px 0}.mnsv{width:100%;display:block;border-radius:12px;border:3px solid #1b1340;overflow:hidden}
+.mnE{aspect-ratio:400/260;display:grid;place-items:center;color:#5b5480;font-weight:800;border:3px dashed #1b134055;border-radius:12px}
+.mnBan{position:absolute;left:0;right:0;top:10px;margin:auto;width:max-content;background:#e5383b;color:#fff;font-family:"Lilita One",sans-serif;font-size:20px;padding:4px 16px;border-radius:99px;border:3px solid #1b1340;box-shadow:0 3px 0 #1b1340;white-space:nowrap;animation:pp .4s both}.mnBan.ok{background:#12a150}
+.mwt{animation:mrise 2.6s ease-in both}@keyframes mrise{from{transform:translateY(262px)}to{transform:translateY(150px)}}
+.mtn{animation:mtnm 3.4s linear both}@keyframes mtnm{from{transform:translate(-80px,0)}to{transform:translate(480px,0)}}
+.mth{animation:mthf 4.2s ease-in-out both}@keyframes mthf{0%{transform:translate(-50px,134px)}35%{transform:translate(130px,134px)}60%{transform:translate(130px,134px)}100%{transform:translate(440px,134px)}}
+.mshop{transform-box:fill-box;transform-origin:50% 100%}
+.mshop.burnt .wall{fill:#3a302c}.mshop.burnt .rf,.mshop.burnt .aw path{fill:#2a2220}.mshop.burnt .win{fill:#161616}.mshop.burnt .door{fill:#2a1c14}
+.mshop.dmg .wall{fill:#8b8379}.mshop.dmg .rf{fill:#5c5650}.mshop.dmg .aw path{fill:#6e6862}.mshop.dmg .win{fill:#7a7a7a}
+.lgl{margin-top:6px;font-size:12px;font-weight:700;color:#1b1340}.lgl div{display:flex;gap:6px;padding:3px 0;border-bottom:1px dashed #d8cda9}.lgl i{font-style:normal;font-weight:800;color:#5b5480;flex:none;width:26px}.lgl .bd{color:#e5383b}.lgl .gd{color:#12a150}
+.fdb,.lbb{text-align:left}.fdb .lbr{font-size:13px}
+</style>
+<style>
+#gw{display:none;position:fixed;inset:0;z-index:44;background:rgba(27,19,64,.9);align-items:center;justify-content:center;flex-direction:column;padding:20px;text-align:center}#gw.on{display:flex}
+#gw .box{width:min(440px,92vw)}#gwt{color:#fff;font-family:"Lilita One",sans-serif;font-size:30px;text-shadow:0 3px 0 #1b1340;margin-bottom:14px}
+.cdn{font-family:"Lilita One",sans-serif;font-size:96px;line-height:1.1;color:#ffd23f;text-shadow:0 6px 0 #1b1340;animation:pp .4s both}
+#ready .box .row,#cgw .row,#gwb .row{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:2px dashed #d8cda9;font-weight:800;color:#1b1340}
+#rbx{display:flex;flex-direction:column;align-items:center}#rbx h2{margin:4px 0}
+#ready .eb,#cgw .eb,#gwb .eb{margin-bottom:4px}
+</style>
+</head><body>
 <header id="top"><button class="btn sm" id="bk" onclick="goBack()" style="visibility:hidden">Kembali</button><div class="tx"><b>Developer</b> : Begawan Damar Ngesti<br><b>Made For</b> : Kompetisi Literasi Asuransi STMA Trisakti</div><img src="data:image/png;base64,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" alt="Logo STMA Trisakti"></header>
 
 <section class="scr on" id="name">
@@ -219,6 +243,8 @@ h1{color:#ffd23f;-webkit-text-stroke:2px #1b1340;paint-order:stroke fill;text-sh
 
 <section class="scr" id="wait"><h1 id="wh" style="font-size:34px"></h1><div class="box" id="wb"></div></section>
 
+<section class="scr" id="ready"><h1 style="font-size:36px">Usahamu terkunci</h1><div class="mute" style="color:#e3dcff" id="rst"></div><div class="box" id="rbx" style="margin:14px 0"></div><button class="btn" id="rdy" onclick="iamReady()">SIAP!</button><div class="box" id="rdb" style="margin-top:14px"></div></section>
+
 <section class="scr" id="admin"><h1 style="font-size:36px">Panel Admin</h1><div class="mute" style="color:#e3dcff">Hanya admin yang bisa membuat kode room. Bagikan kodenya ke pemain, ACC maksimal 4 orang per room, lalu tekan Mulai Room.</div><button class="btn" id="mk" style="max-width:320px">Buat Room Baru</button><div id="ab"></div></section>
 
 <section class="scr" id="end"><div id="endbox"></div></section>
@@ -226,6 +252,7 @@ h1{color:#ffd23f;-webkit-text-stroke:2px #1b1340;paint-order:stroke fill;text-sh
 <div id="deck"><div class="ring" id="ring"></div><div class="fc" id="fc"><div class="fi"><div class="fa b" id="fb"></div><div class="fa f" id="ff"></div></div></div>
 <div id="dtw" style="display:none"><div class="bar"><i id="dtb"></i></div><button class="btn" id="dn" onclick="toOffers()">Lanjut</button><div id="dt"></div></div></div>
 <div id="sky"></div>
+<div id="gw"><div id="gwt"></div><div id="gwb" class="box"></div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
@@ -244,6 +271,7 @@ const P0=[{id:"api",n:"Kebakaran",cover:["kebakaran"],prem:3e5,lim:5e6},{id:"cur
 const P=[...P0.map(p=>({...p,id:"f_"+p.id,cl:"flat",prem:Math.round(p.prem*.8/1e4)*1e4})),...P0.map(p=>({...p,id:"n_"+p.id,cl:"non",prem:Math.round(p.prem*1.3/1e4)*1e4,lim:p.lim*1.6}))];
 const NONE={id:"none",n:"Tanpa asuransi",prem:0,cover:[],lim:0,cl:"none"},ALL=[...P,NONE];
 let S;
+const lg=t=>{if(!S)return;(S.log=S.log||[]).push({t:Date.now(),r:S.round,m:t});if(S.log.length>30)S.log.shift()};
 
 function ppl(sh,o={}){
   const sk=o.skin||"#e3b583",hr=o.hair||"#2a1d16",pt=o.pants||"#2b3347";
@@ -305,11 +333,29 @@ async function queue(onTwo){
 }
 
 function pick(i){
-  S={mp:!!(ME&&ME.mp),b:B[i],cash:START,inc:0,round:0,prem:0,claim:0,lossTot:0,locs:[...L].sort(()=>Math.random()-.5).slice(0,RN)};
+  S={mp:!!(ME&&ME.mp),b:B[i],cash:START,inc:0,round:0,prem:0,claim:0,lossTot:0,rg:-1,cg:0,locs:[...L].sort(()=>Math.random()-.5).slice(0,RN),log:[]};lg("Membuka usaha "+S.b.n);
+  if(S.mp&&DB){S.ph="Usaha terkunci";sync();showReady();return}
+  begin();
+}
+function begin(){
   sky(()=>{show("game");buildScene();$("#panel").innerHTML="";hud()});
   {const g=++GEN;setTimeout(()=>g===GEN&&nextRound(),2000)}
 }
-function nextRound(){S.round++;S.locked=false;S.choice=null;S.loc=S.locs[S.round-1];resetScene();hud();deck()}
+function showReady(){
+  $("#rbx").innerHTML=`<svg viewBox="0 0 40 80" width="60" height="120"><g class="pp idle">${ppl(S.b.c,{pants:"#3b3b4f"})}</g></svg><h2>${S.b.n}</h2><div class="mute">Pilihan usahamu sudah terkunci dan tidak bisa diubah.</div>`;
+  $("#rdy").style.display="";$("#rst").textContent="Klik SIAP kalau kamu sudah siap. Permainan baru mulai setelah semua pemain siap.";
+  show("ready");gateUI({f:"rg",g:0,el:"#rdb",pre:true});
+}
+async function iamReady(){
+  if(!S||S.rg>=0)return;const S0=S;
+  $("#rdy").style.display="none";$("#rst").textContent="Kamu sudah siap. Menunggu pemain lain...";
+  S.ph="Siap, menunggu pemain lain";lg("Siap bermain");
+  if(!(await gateWait("rg",0,"#rdb"))||S0.left)return;
+  await flashOv(["3","2","1","MULAI!"],"Semua pemain siap!",800);
+  if(S0.left||S!==S0)return;
+  begin();
+}
+function nextRound(){S.round++;S.locked=false;S.choice=null;S.ek="";S.sh="";S.loss=0;S.cl=0;S.loc=S.locs[S.round-1];lg("Ronde "+S.round+": lokasi "+S.loc.n);resetScene();hud();deck()}
 async function deck(){
   const ring=$("#ring"),fc=$("#fc"),lv=["Tinggi","Sedang","Rendah"];
   ring.style.animation="none";void ring.offsetWidth;ring.style.animation="";
@@ -331,7 +377,7 @@ async function toOffers(){
   let x=Math.random()*8.7,ev="aman";for(const [k,v] of w){x-=v;if(x<=0){ev=k;break}}
   S.ev=ev;S.offers={flat:mkOffers("flat"),non:mkOffers("non")};
   $("#panel").innerHTML=`<div class="box mute">Pelanggan datang berbelanja...</div>`;
-  offers();S.qp=queue();
+  S.qd=false;offers();S.qp=queue().then(()=>{S.qd=true});
 }
 function row(p){
   const info=p.id==="none"?`<div class="mute">Tanpa premi</div>`:`<span class="chip l1">Premi ${sn(p.prem)}</span><div class="mute">${p.cl==="flat"?"Santunan tetap ":"Maks. "}${sn(p.lim)}</div>`;
@@ -345,10 +391,17 @@ function offers(){
 }
 async function choose(id){
   if(S.locked)return;S.locked=true;clearInterval(S.iv);
-  const p=ALL.find(x=>x.id===id);S.choice=p;
+  const p=ALL.find(x=>x.id===id);S.choice=p;lg(p.prem?"Memilih polis "+p.n+" ("+(p.cl==="flat"?"Flat":"Non-Flat")+"), premi "+fmt(p.prem):"Memilih tanpa asuransi");
   $("#o-"+id).classList.add("sel");$("#o-"+id).insertAdjacentHTML("beforeend",`<div class="stamp">DIPILIH</div>`);
   if(p.prem){S.cash-=p.prem;S.prem+=p.prem;pop("-"+sn(p.prem),"bad");$("#badge").style.opacity=1;$("#bt").textContent=p.n+" ("+(p.cl==="flat"?"Flat":"Non-Flat")+")"}
-  hud();await sleep(1200);await S.qp;playEvent();
+  hud();
+  const hd=document.querySelector("#panel .hd"),br=document.querySelector("#panel .bar");
+  if(hd)hd.innerHTML='<span>Pilihanmu terkunci</span><span>&#10003;</span>';if(br)br.style.display="none";
+  document.querySelectorAll("#panel .of").forEach(e=>{if(!e.classList.contains("sel"))e.style.opacity=".4";e.style.pointerEvents="none"});
+  if((S.mp&&DB)||!S.qd)$("#panel").insertAdjacentHTML("beforeend",'<div class="box" id="cgw" style="margin-top:10px"><div class="mute">'+(S.qd?"":"Pelanggan masih berbelanja...")+'</div></div>');
+  await sleep(900);await S.qp;
+  if(!(await gateWait("cg",S.round,"#cgw",45000)))return;
+  playEvent();
 }
 
 async function fx(ev){
@@ -388,38 +441,48 @@ async function fx(ev){
 }
 
 async function playEvent(){
-  const ev=S.ev,k=$("#keeper");$("#panel").innerHTML="";S.ph=ev==="aman"?"Ronde aman":"Terkena "+RK[ev].n;sync();await sleep(500);
+  const ev=S.ev,k=$("#keeper");$("#panel").innerHTML="";S.ph=ev==="aman"?"Ronde aman":"Terkena "+RK[ev].n;S.ek=S.round+"-"+ev;lg(ev==="aman"?"Ronde aman, tidak ada musibah":"Kejadian: "+RK[ev].n);sync();await sleep(500);
   if(ev==="aman"){
     st(k,"cheer");await sleep(1500);
     $("#panel").innerHTML=`<div class="box"><div class="big">${ic("sun",44)}</div><h2>Ronde ini aman</h2><div class="mute">Tidak ada musibah. Tapi premi tetap sudah kamu bayar, dan musibah tidak bisa ditebak.</div>${btn("Lanjut","nextR()")}</div>`;return;
   }
-  await fx(ev);
-  const r=RK[ev],p=S.choice;S.loss=Math.round(r.loss*(.4+Math.random()*1.4)/1e5)*1e5;S.lossTot+=S.loss;
+  await fx(ev);S.sh=ev==="kebakaran"?"burnt":ev==="pencurian"?"":"dmg";
+  const r=RK[ev],p=S.choice;S.loss=Math.round(r.loss*(.4+Math.random()*1.4)/1e5)*1e5;S.lossTot+=S.loss;lg("Kerugian aktual "+fmt(S.loss));sync();
   const hdr=`<div class="big">${ic(ev,44)}</div><h2>${r.n}</h2><div class="row"><span>Estimasi kerugian</span><span>${est(ev)}</span></div><div class="row"><span>Kerugian aktual</span><b class="bad">${fmt(S.loss)}</b></div>`;
   if(p.cover.includes(ev)){
     $("#panel").innerHTML=`<div class="box">${hdr}${btn("Ajukan klaim","claim()")}</div>`;
   }else{
-    S.cash-=S.loss;hud();pop("-"+sn(S.loss),"bad");
+    S.cash-=S.loss;lg("Tanpa perlindungan, rugi "+fmt(S.loss)+" ditanggung sendiri");hud();pop("-"+sn(S.loss),"bad");
     $("#panel").innerHTML=`<div class="box">${hdr}<div class="row"><span>Kamu tanggung sendiri</span><b class="bad">${fmt(S.loss)}</b></div>${S.cash<=0?lose():btn("Bangun kembali","rebuild()")}</div>`;
   }
 }
 function claim(){
   const r=RK[S.ev],p=S.choice,flat=p.cl==="flat",cl=flat?p.lim:Math.min(S.loss,p.lim),d=cl-S.loss;
-  S.claim+=cl;S.cash+=d;hud();st($("#keeper"),d<0?"sad":"cheer");pop(d>=0?"+"+sn(d):"-"+sn(-d),d>=0?"good":"bad");
+  S.claim+=cl;S.cash+=d;S.cl=cl;lg("Klaim cair "+fmt(cl)+(d<0?", sisa "+fmt(-d)+" ditanggung sendiri":d>0?", kelebihan "+fmt(d):""));hud();st($("#keeper"),d<0?"sad":"cheer");pop(d>=0?"+"+sn(d):"-"+sn(-d),d>=0?"good":"bad");
   const note=flat?(d>0?"Santunan tetap lebih besar dari kerugian, selisihnya jadi keuntungan.":d<0?"Santunan tetap lebih kecil dari kerugian, sisanya kamu tanggung.":"Santunan pas dengan kerugian."):(d<0?"Kerugian melewati limit, sisanya kamu tanggung.":"Kerugian diganti penuh sesuai kerugian nyata.");
   $("#panel").innerHTML=`<div class="box"><div class="row"><span>Kerugian aktual</span><b>${fmt(S.loss)}</b></div><div class="row"><span>${flat?"Santunan tetap":"Ganti rugi (maks. "+sn(p.lim)+")"}</span><b class="good">${fmt(cl)}</b></div><div class="row"><span>${d>=0?"Kelebihan klaim":"Kamu tanggung"}</span><b class="${d>=0?"good":"bad"}">${fmt(Math.abs(d))}</b></div><p class="mute">${note}</p>${S.cash<=0?lose():btn("Bangun kembali","rebuild()")}</div>`;
 }
-const lose=()=>{S.lost=true;return `<p class="bad"><b>Usahamu bangkrut</b></p>${btn("Lihat hasil","end()")}`};
-async function rebuild(){
+const lose=()=>{S.lost=true;lg("Usaha bangkrut");sync();return `<p class="bad"><b>Usahamu bangkrut</b></p>${btn("Lihat hasil","end()")}`};
+async function rebuild(){S.sh="";lg("Membangun kembali usaha");sync();
   $("#panel").innerHTML="";const k=$("#keeper"),sp=$("#shop"),T="translate(100px,70px)";
   st(k,"hammer");await sleep(1100);
   sp.setAttribute("class","");sp.animate([{transform:T+" scaleY(.15)"},{transform:T}],{duration:900,easing:"ease-out"});
   await sleep(1000);st(k,"cheer");await sleep(900);nextR();
 }
-const nextR=()=>S.round>=RN?end():nextRound();
+const nextR=async()=>{
+  if(S.round>=RN){end();return}
+  if(S.mp&&DB&&ME&&ME.mp){
+    const S0=S;S.ph="Menunggu pemain lain";lg("Ronde "+S.round+" selesai, menunggu pemain lain");
+    $("#gwt").textContent="Ronde "+S.round+" selesai";$("#gwb").className="box";$("#gwb").innerHTML="";$("#gw").classList.add("on");
+    if(!(await gateWait("rg",S.round,"#gwb",90000))||S0.left)return;
+    await flashOv(["Ronde "+(S.round+1)],"Semua pemain siap!",1100);
+    if(S0.left)return;
+  }
+  nextRound();
+};
 
 function end(){
-  clearInterval(S.iv);S.fin=true;S.ph="Selesai";sync();const no=START+FEE*CUST*RN-S.lossTot,fin=S.cash,lost=S.lost||fin<=0,gap=S.lossTot-S.claim;
+  clearInterval(S.iv);S.fin=true;S.ph="Selesai";lg("Selesai dengan saldo "+fmt(S.cash));sync();const no=START+FEE*CUST*RN-S.lossTot,fin=S.cash,lost=S.lost||fin<=0,gap=S.lossTot-S.claim;
   const rank=lost?"Bangkrut":fin<9e6?"Bertahan":fin<13e6?"Pengusaha Handal":"Juragan UMKM";
   const msg=lost?"Tanpa perlindungan yang tepat, satu musibah bisa menghabiskan modal.":S.lossTot===0?"Tidak ada musibah kali ini. Lain kali belum tentu.":fin>=no?"Asuransi menyelamatkan "+fmt(fin-no)+" dibanding tanpa asuransi.":"Hasilmu "+fmt(no-fin)+" di bawah skenario tanpa asuransi. Cocokkan jenis polis (flat atau non-flat) dengan risiko lokasimu.";
   $("#endbox").innerHTML=`<div class="box" style="margin-top:20px"><div class="big">${ic(lost?"none":"shield",56)}</div><h1>${rank}</h1><div class="cash">${fmt(fin)}</div><div class="rule" style="margin:10px auto"></div>
@@ -433,30 +496,121 @@ let DB=null,UID=null,ADM=false,PL=[],CTL={},ME=null;
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const okOf=id=>CTL["ok_"+id]&&CTL["ok_"+id].room;
 function sync(){
-  if(!DB||!S||!S.mp||!ME)return;clearTimeout(S.sy);
-  S.sy=setTimeout(()=>{DB.doc("players/"+UID).set({name:ME.name,room:ME.room,biz:S.b.n,loc:S.loc?S.loc.n:"",cash:Math.round(S.cash),round:S.round,ph:S.ph||"",pol:S.choice?S.choice.n+" ("+(S.choice.cl==="flat"?"Flat":"Non-Flat")+")":"",fin:!!S.fin,t:Date.now()}).catch(()=>{})},250);
+  if(!DB||!S||!S.mp||!ME)return;clearTimeout(S.sy);const M=ME,S0=S;
+  S.sy=setTimeout(()=>{const S=S0;DB.doc("players/"+UID).set({name:M.name,room:M.room,biz:S.b.n,loc:S.loc?S.loc.n:"",cash:Math.round(S.cash),round:S.round,ph:S.ph||"",pol:S.choice?S.choice.n+" ("+(S.choice.cl==="flat"?"Flat":"Non-Flat")+")":"",fin:!!S.fin,bi:B.indexOf(S.b),ek:S.ek||"",ev:S.ek?S.ev:"",loss:S.loss||0,cl:S.cl||0,sh:S.sh||"",lost:!!S.lost,rg:S.rg==null?-1:S.rg,cg:S.cg||0,lg:(S.log||[]).slice(-14),t:Date.now()}).catch(()=>{})},250);
 }
 const lbHtml=room=>{
   const rs=PL.filter(p=>p.room===room&&okOf(p.id)===room).sort((a,b)=>b.cash-a.cash);
   return rs.map((p,i)=>`<div class="lbr"><span class="rkn">${i+1}</span><span style="flex:1">${esc(p.name)}${p.id===UID?" (kamu)":""}<br><small class="mute">${esc(p.biz||"")}</small></span><span class="mute">${p.fin?"Selesai":"Ronde "+p.round}</span><b>${fmt(p.cash)}</b></div>`).join("")||'<div class="mute">Belum ada pemain</div>';
 };
 function lb(){const e=$("#lbx");if(e&&ME&&ME.mp)e.innerHTML='<div class="eb" style="margin-top:16px">Leaderboard Room '+esc(ME.room)+'</div>'+lbHtml(ME.room)}
+const pause=ms=>new Promise(r=>setTimeout(r,ms));
+async function flashOv(seq,title,ms){
+  const o=$("#gw");o.classList.add("on");$("#gwt").textContent=title;$("#gwb").className="";
+  for(const t of seq){$("#gwb").innerHTML='<div class="cdn">'+esc(t)+'</div>';await pause(ms)}
+  o.classList.remove("on");
+}
+function gateList(f,g,selfOk){
+  const r=ME.room,o=PL.filter(p=>p.room===r&&okOf(p.id)===r&&p.id!==UID&&!p.fin&&!p.lost&&p.ph!=="Keluar dari game");
+  return [{name:ME.name,ok:selfOk,self:1,biz:S&&S.b?S.b.n:""},...o.map(p=>({name:p.name,ok:(p[f]==null?-1:p[f])>=g,biz:p.biz}))];
+}
+function gateUI(G){
+  if(!G||!S||!ME||!ME.mp)return;const el=$(G.el);if(!el)return;
+  const L=gateList(G.f,G.g,!G.pre),n=L.filter(x=>x.ok).length;
+  const st=x=>x.ok?"Siap":(G.f==="rg"&&G.g===0?(x.biz?"Belum klik siap":"Memilih usaha"):"Masih bermain...");
+  el.innerHTML='<div class="eb">'+n+'/'+L.length+' pemain siap</div>'+L.map(x=>`<div class="row"><span>${esc(x.name)}${x.self?" (kamu)":""}</span><b class="${x.ok?"good":"mute"}">${st(x)}</b></div>`).join("");
+  if(!G.pre&&n===L.length)gateDone();
+}
+function gateDone(){const G=S&&S.gcb;if(!G)return;S.gcb=null;clearTimeout(G.to);G.res(true)}
+function gateCancel(){const G=S&&S.gcb;if(!G)return;S.gcb=null;clearTimeout(G.to);G.res(false)}
+function gateWait(f,g,el,max){
+  return new Promise(res=>{
+    if(!(S&&S.mp&&DB&&ME&&ME.mp)){res(true);return}
+    S[f]=g;sync();
+    const G=S.gcb={f,g,el,res};if(max)G.to=setTimeout(()=>{if(S&&S.gcb===G)gateDone()},max);
+    gateUI(G);
+  });
+}
 function renderWait(){
   if(!ME||!ME.mp)return;const r=ME.room,ok=okOf(UID)===r,go=CTL["room_"+r]&&CTL["room_"+r].started;
-  if(ok&&go){$("#hi").textContent="Halo, "+ME.name+" - Room "+r;show("start");return}
+  if(ok&&go){$("#hi").textContent="Halo, "+ME.name+" - Room "+r;if(!ME.pk){ME.pk=1;DB.doc("players/"+UID).set({name:ME.name,room:ME.room,biz:"",loc:"",cash:START,round:0,ph:"Memilih usaha",pol:"",fin:false,rg:-1,cg:0,t:Date.now()}).catch(()=>{})}show("start");return}
   const ap=PL.filter(p=>p.room===r&&okOf(p.id)===r);
   $("#wh").textContent="Room "+r;
   $("#wb").innerHTML=`<h2>${esc(ME.name)}</h2><p class="mute">${ok?"Kamu sudah di-ACC. Menunggu admin memulai room.":"Menunggu ACC dari admin..."}</p><div class="eb">Pemain di room (${ap.length}/4)</div>${ap.map(p=>`<div class="row"><span>${esc(p.name)}</span></div>`).join("")||'<div class="mute">Belum ada</div>'}`;
 }
+/* ===== Admin: layar usaha tiap pemain ===== */
+let ADT=0;const FXS={},FXMS=5200;
+const EVN={kebakaran:"KEBAKARAN!",banjir:"BANJIR!",pencurian:"KEMALINGAN!",gunung:"GUNUNG MELETUS!",gempa:"GEMPA BUMI!",angin:"PUTING BELIUNG!"};
+const setH=(el,h)=>{if(el&&el._h!==h){el._h=h;el.innerHTML=h}};
+function fxOn(p){
+  if(!p.ek)return false;let f=FXS[p.id];
+  if(!f||f.ek!==p.ek){const fresh=Date.now()-ADT>3500;f=FXS[p.id]={ek:p.ek,s:fresh?Date.now():0};if(fresh)setTimeout(()=>{if($("#admin").classList.contains("on"))renderAdmin()},FXMS+120)}
+  return Date.now()-f.s<FXMS;
+}
+function mini(p,on,u){
+  const b=B[p.bi];if(!b)return '<div class="mnE">Belum pilih usaha</div>';
+  const ev=p.ek?p.ek.split("-")[1]:"",sh=p.sh||"",f=on&&ev&&ev!=="aman"?ev:"",ph=p.ph||"";
+  const lm=(p.lg||[]).slice(-1)[0],ham=lm&&/Membangun/.test(lm.m);
+  const R=(n,fn)=>[...Array(n)].map((_,i)=>fn(i)).join(""),tint=c=>`<rect class="tint" width="400" height="260" fill="${c}"/>`;
+  let aw="";for(let i=0;i<10;i++)aw+=`<path d="M${10+i*18} 44h18v12q-9 9-18 0z" fill="${i%2?"#f8f4ea":b.c}"/>`;
+  const tree=x=>`<rect x="${x-2}" y="176" width="4" height="36" fill="#5b4332"/><circle cx="${x}" cy="168" r="17" fill="#4f7d52"/><circle cx="${x-8}" cy="176" r="11" fill="#5d8d5f"/>`;
+  const per=(x,y,c,cls,o)=>`<g style="transform:translate(${x}px,${y}px)"><g class="pp ${cls}">${ppl(c,o||{pants:"#3b3b4f"})}</g></g>`;
+  let ks="idle";
+  if(f)ks=f==="gempa"?"panic rock":"panic";
+  else if(ham)ks="hammer";
+  else if(p.fin)ks=p.lost?"sad":"cheer";
+  else if(ph==="Ronde aman")ks="cheer";
+  else if(ph.indexOf("Terkena")===0)ks="sad";
+  let fxm="",th="";
+  if(f==="kebakaran")fxm=tint("rgba(255,90,0,.2)")+R(12,i=>`<g transform="translate(${112+i*16},${i%2?176:208}) scale(${1.2+(i%4)*.3})"><g class="fl1" style="animation-delay:${i*.07}s"><path d="M0 0C-10-10-6-22 0-34 6-22 10-10 0 0Z" fill="#e8520e"/><path d="M0 0C-6-7-4-15 0-22 4-15 6-7 0 0Z" fill="#f7b733"/><path d="M0 0C-2-3-1-8 0-11 1-8 2-3 0 0Z" fill="#fff3b0"/></g></g>`)+R(5,i=>`<circle class="smk" cx="${140+i*30}" cy="105" r="14" fill="#555" style="animation-delay:${i*.4}s"/>`);
+  if(f==="banjir")fxm=tint("rgba(40,60,90,.3)")+R(14,i=>`<line class="rn" x1="${i*30}" y1="0" x2="${i*30-6}" y2="14" stroke="#a6d0ff" stroke-width="2" style="animation-delay:${(i%5)*.12}s"/>`)+`<g class="mwt"><path class="wv" d="M-100 0Q-75-9-50 0T0 0T50 0T100 0T150 0T200 0T250 0T300 0T350 0T400 0T450 0V140H-100Z" fill="#3b82c4" opacity=".85"/></g>`;
+  if(f==="gunung")fxm=`<g class="tint"><polygon points="262,210 322,100 382,210" fill="#6b4a3a"/><polygon points="306,116 322,100 338,116 322,124" fill="#e5521b"/></g>`+tint("rgba(35,22,22,.55)")+R(8,i=>`<circle class="lava" cx="322" cy="100" r="4" fill="#ff7a1f" style="--x:${-110+i*30}px;animation-delay:${i*.18}s"/>`)+R(4,i=>`<circle class="ash" cx="${300+i*18}" cy="${80-i*8}" r="30" fill="#3a3333" style="animation-delay:${i*.25}s"/>`)+R(5,i=>`<circle class="bomb" cx="${130+i*45}" cy="0" r="5" fill="#4a3a30" style="animation-delay:${i*.2}s"/>`);
+  if(f==="gempa")fxm=R(4,i=>`<polyline class="crk" points="${120+i*50},212 ${130+i*50},224 ${118+i*50},236 ${134+i*50},250" stroke="#2b2b2b" fill="none" stroke-width="3" style="animation-delay:${i*.2}s"/>`);
+  if(f==="angin")fxm=tint("rgba(80,90,100,.25)")+`<g class="mtn">${[[40,46],[30,78],[22,108],[15,138],[9,168],[5,196]].map(([r,y],i)=>`<ellipse cx="0" cy="${y+10}" rx="${r}" ry="8" fill="#8e98a3" opacity=".9" style="animation-delay:${i*.07}s"/>`).join("")}</g>`+R(7,i=>`<ellipse class="lf" cx="0" cy="${60+i*20}" rx="6" ry="3" fill="#5aa95a" style="animation-delay:${i*.2}s"/>`);
+  if(f==="pencurian"){fxm='<polyline class="crk" points="206,150 226,166 214,182 240,186" stroke="#fff" fill="none" stroke-width="2.5"/><polyline class="crk" points="262,150 238,168 250,184" stroke="#fff" fill="none" stroke-width="2.5"/><rect class="alm" width="400" height="260" fill="#ff2d2d"/>';th=`<g class="mth"><g class="pp run hasbag">${ppl("#222",{thief:1,pants:"#222"})}</g></g>`}
+  const cust=!f&&ph==="Memilih asuransi"?per(248,138,"#3f6d8f","idle",{skin:"#e0b080",pants:"#454a58"})+per(208,138,"#8c5a6e","idle",{skin:"#c99466",hair:"#4a3320",pants:"#454a58"}):"";
+  const bdg=p.pol?`<g><rect x="130" y="62" width="140" height="18" rx="9" fill="var(--card)" stroke="var(--gold)" stroke-width="1.5"/><text x="200" y="74.5" text-anchor="middle" font-size="9.5" font-weight="700" fill="var(--gold)">${esc(p.pol.length>26?p.pol.slice(0,25)+"...":p.pol)}</text></g>`:"";
+  const svg=`<svg viewBox="0 0 400 260" class="mnsv${f==="gempa"?" quake":""}"><defs><linearGradient id="sg${u}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--sky1)"/><stop offset="1" style="stop-color:var(--sky2)"/></linearGradient><linearGradient id="wg${u}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${b.w}"/><stop offset="1" stop-color="${b.w}" stop-opacity=".82"/></linearGradient></defs>
+<rect width="400" height="260" fill="url(#sg${u})"/><circle cx="330" cy="58" r="15" fill="#f8e4a0" opacity=".9"/><g class="cld"><ellipse cx="60" cy="40" rx="30" ry="11" fill="#fff" opacity=".7"/><ellipse cx="85" cy="34" rx="22" ry="9" fill="#fff" opacity=".7"/></g>
+<polygon points="0,192 60,128 115,172 190,112 270,176 340,136 400,182 400,214 0,214" fill="var(--m1)" opacity=".75"/>${tree(34)}${tree(372)}
+<rect y="210" width="400" height="50" fill="var(--ground)"/><rect y="210" width="400" height="8" fill="#cfc8b8"/><rect y="236" width="400" height="24" fill="#6b6e75" opacity=".55"/><path d="M0 248H400" stroke="#fff" stroke-width="2" stroke-dasharray="14 12" opacity=".5"/>
+<g class="mshop ${on?"":sh}" style="transform:translate(100px,70px)"><rect class="wall" x="14" y="40" width="172" height="100" fill="url(#wg${u})"/><rect x="14" y="128" width="172" height="12" fill="#000" opacity=".08"/><rect class="rf" x="6" y="26" width="188" height="18" rx="3" fill="${b.c}"/><rect x="6" y="40" width="188" height="3" fill="#000" opacity=".18"/><g class="aw">${aw}</g>
+<rect x="54" y="4" width="92" height="22" rx="4" fill="var(--card)" stroke="${b.c}" stroke-width="2"/><text x="100" y="19.5" text-anchor="middle" font-size="12" font-weight="700" letter-spacing="2" fill="${b.c}" style="font-family:'Lilita One',Impact,sans-serif">${b.s}</text>
+<rect class="door" x="34" y="78" width="44" height="62" rx="3" fill="#6b4a35"/><rect x="39" y="83" width="34" height="30" rx="2" fill="#cfe6f3" opacity=".85"/><circle cx="70" cy="114" r="2.5" fill="#e9c872"/>
+<rect class="win" x="98" y="76" width="68" height="40" rx="3" fill="#cfe6f3" stroke="#fff" stroke-width="3"/><polygon points="106,76 124,76 108,116 98,116" fill="#fff" opacity=".35"/><rect x="104" y="104" width="56" height="3" fill="${b.c}" opacity=".5"/><rect x="150" y="124" width="14" height="16" rx="2" fill="#a0593a"/><ellipse cx="157" cy="122" rx="10" ry="8" fill="#4f7d52"/></g>
+${per(300,130,b.c,ks)}${cust}${th}${bdg}<g>${fxm}</g></svg>`;
+  const ban=on&&ev?`<div class="mnBan${ev==="aman"?" ok":""}">${ev==="aman"?"RONDE AMAN":EVN[ev]}</div>`:"";
+  return svg+ban;
+}
+const lgCls=m=>/Kejadian|bangkrut|Kerugian|rugi/.test(m)?"bd":/Klaim cair|aman|Selesai/.test(m)?"gd":"";
 function renderAdmin(){
-  const rooms=Object.keys(CTL).filter(k=>k.startsWith("rc_")).map(k=>k.slice(3)).sort();
-  $("#ab").innerHTML=rooms.map(r=>{
+  const ab=$("#ab"),rooms=Object.keys(CTL).filter(k=>k.startsWith("rc_")).map(k=>k.slice(3)).sort();
+  let emp=$("#noroom");
+  if(!emp){emp=document.createElement("div");emp.id="noroom";emp.className="box";emp.style.marginTop="16px";emp.innerHTML='<div class="mute">Belum ada room. Tekan Buat Room Baru.</div>';ab.appendChild(emp)}
+  emp.style.display=rooms.length?"none":"";
+  [...ab.querySelectorAll(".rw")].forEach(e=>{if(!rooms.includes(e.dataset.r))e.remove()});
+  rooms.forEach(r=>{
+    let w=ab.querySelector('.rw[data-r="'+r+'"]');
+    if(!w){w=document.createElement("div");w.className="rw";w.dataset.r=r;
+      w.innerHTML='<div class="rmh"></div><div class="ag">'+[0,1,2,3].map(()=>'<div class="box ac sl"><div class="slh"></div><div class="slS"></div><div class="slI"></div><div class="slK"></div></div>').join("")+'</div><div class="pe"></div><div class="box fdb" style="margin-top:14px"></div><div class="box lbb" style="margin-top:14px"></div>';
+      ab.insertBefore(w,emp)}
     const ms=PL.filter(p=>p.room===r),ap=ms.filter(p=>okOf(p.id)===r),pe=ms.filter(p=>okOf(p.id)!==r),go=CTL["room_"+r]&&CTL["room_"+r].started;
-    const slots=[0,1,2,3].map(i=>{const p=ap[i];return p?`<div class="box ac"><div class="eb">${esc(p.biz||"Belum pilih usaha")}</div><h2>${esc(p.name)}</h2><div class="mute">${esc(p.loc||"-")} - Ronde ${p.round}/${RN}</div><div class="acash">${fmt(p.cash)}</div><span class="chip l2">${esc(p.ph||"-")}</span><div class="mute" style="margin-top:6px">${p.pol?"Polis: "+esc(p.pol):"Belum pilih polis"}</div><button class="btn sm" data-k="${esc(p.id)}">Keluarkan</button></div>`:`<div class="box ac"><div class="mute" style="margin-top:60px">Slot ${i+1} kosong</div></div>`}).join("");
-    return `<div class="rmh"><h2>Kode Room: <span class="rcode">${esc(r)}</span></h2><button class="btn sm" data-x="${esc(r)}">Hapus</button><button class="btn sm" data-s="${esc(r)}" ${go||!ap.length?"disabled":""}>${go?"Sudah dimulai":"Mulai Room"}</button></div><div class="ag">${slots}</div>`+
-    (pe.length?`<div class="box"><div class="eb">Menunggu ACC (${ap.length}/4 terisi)</div>${pe.map(p=>`<div class="row"><span>${esc(p.name)}</span><button class="btn sm" data-a="${esc(p.id)}" data-r="${esc(r)}" ${ap.length>=4?"disabled":""}>ACC</button></div>`).join("")}</div>`:"")+
-    `<div class="box" style="margin-top:14px"><div class="eb">Leaderboard</div>${lbHtml(r)}</div>`;
-  }).join("")||'<div class="box" style="margin-top:16px"><div class="mute">Belum ada room. Tekan Buat Room Baru.</div></div>';
+    setH(w.querySelector(".rmh"),`<h2>Kode Room: <span class="rcode">${esc(r)}</span></h2><button class="btn sm" data-x="${esc(r)}">Hapus</button><button class="btn sm" data-s="${esc(r)}" ${go||!ap.length?"disabled":""}>${go?"Sudah dimulai":"Mulai Room"}</button>`);
+    w.querySelectorAll(".sl").forEach((sl,i)=>{
+      const p=ap[i],q=c=>sl.querySelector(c);
+      if(!p){setH(q(".slh"),`<div class="mute" style="margin:60px 0;text-align:center">Slot ${i+1} kosong</div>`);setH(q(".slS"),"");setH(q(".slI"),"");setH(q(".slK"),"");return}
+      const bad=p.lost||p.cash<=0;
+      setH(q(".slh"),`<div><div class="eb">${esc(p.biz||"Belum pilih usaha")}</div><h2>${esc(p.name)}</h2><div class="mute">${esc(p.loc||"-")} - Ronde ${p.round}/${RN}</div></div><div class="acash"${bad?' style="color:#e5383b"':""}>${fmt(p.cash)}</div>`);
+      setH(q(".slS"),mini(p,fxOn(p),r+i));
+      const rows=(p.lg||[]).slice(-5).reverse().map(e=>`<div class="${lgCls(e.m)}"><i>R${e.r||0}</i><span>${esc(e.m)}</span></div>`).join("");
+      setH(q(".slI"),`<span class="chip l2">${esc(p.ph||"-")}</span><div class="mute" style="margin-top:6px">${p.pol?"Polis: "+esc(p.pol):"Belum pilih polis"}</div><div class="lgl">${rows||'<div class="mute">Belum ada aktivitas</div>'}</div>`);
+      setH(q(".slK"),`<button class="btn sm" data-k="${esc(p.id)}">Keluarkan</button>`);
+    });
+    setH(w.querySelector(".pe"),pe.length?`<div class="box"><div class="eb">Menunggu ACC (${ap.length}/4 terisi)</div>${pe.map(p=>`<div class="row"><span>${esc(p.name)}</span><button class="btn sm" data-a="${esc(p.id)}" data-r="${esc(r)}" ${ap.length>=4?"disabled":""}>ACC</button></div>`).join("")}</div>`:"");
+    const evs=[];ap.forEach(p=>(p.lg||[]).forEach(e=>evs.push({n:p.name,t:e.t,r:e.r,m:e.m})));evs.sort((x,y)=>y.t-x.t);
+    setH(w.querySelector(".fdb"),'<div class="eb">Kejadian Terbaru Room</div>'+(evs.slice(0,12).map(e=>`<div class="lbr"><span class="mute" style="flex:none;width:64px">${new Date(e.t).toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit",second:"2-digit"})}</span><b style="flex:none">${esc(e.n)}</b><span style="flex:1">${esc(e.m)}</span></div>`).join("")||'<div class="mute">Belum ada kejadian</div>'));
+    setH(w.querySelector(".lbb"),'<div class="eb">Leaderboard</div>'+lbHtml(r));
+  });
 }
 $("#ab").onclick=e=>{const b=e.target.closest("button");if(!b||b.disabled||!DB)return;const d=b.dataset;
   if(d.a)DB.doc("ctl/ok_"+d.a).set({room:d.r}).catch(()=>{});
@@ -468,6 +622,7 @@ function mpRender(){
   if($("#admin").classList.contains("on"))renderAdmin();
   if($("#wait").classList.contains("on"))renderWait();
   if($("#end").classList.contains("on"))lb();
+  if(S&&ME&&ME.mp){if(S.gcb)gateUI(S.gcb);else if($("#ready").classList.contains("on"))gateUI({f:"rg",g:0,el:"#rdb",pre:true})}
 }
 function route(){}
 addEventListener("hashchange",route);
@@ -475,9 +630,11 @@ function goBack(){
   const id=document.querySelector(".scr.on").id,b=$("#bk");
   if(id==="game"){
     if(!S.bk){S.bk=1;b.textContent="Yakin keluar?";setTimeout(()=>{if(S){S.bk=0;b.textContent="Kembali"}},3000);return}
-    GEN++;clearInterval(S.iv);clearInterval(S.dv);$("#deck").style.display="none";S.ph="Keluar dari game";sync();S.bk=0;
+    GEN++;clearInterval(S.iv);clearInterval(S.dv);$("#deck").style.display="none";S.ph="Keluar dari game";S.left=1;lg("Keluar dari game");sync();S.bk=0;
   }
-  if(id==="wait"&&DB)DB.doc("players/"+UID).delete().catch(()=>{});
+  if(id==="game"){gateCancel();$("#gw").classList.remove("on")}
+  if(id==="ready"){gateCancel();clearTimeout(S.sy);S=null;$("#gw").classList.remove("on")}
+  if((id==="wait"||id==="ready")&&DB)DB.doc("players/"+UID).delete().catch(()=>{});
   if(id==="admin")history.replaceState(null,"",location.pathname+location.search);
   b.textContent="Kembali";ME=null;show("name");
 }
@@ -490,7 +647,7 @@ async function joinRoom(){
   if(!DB){nerr("Mode room butuh login claude.ai dan akses Contributor. Coba Main Solo.");return}
   if(!CTL["rc_"+r]){nerr("Kode room tidak ditemukan. Minta kode ke admin.");return}
   ME={name:n,room:r,mp:true};
-  try{await DB.doc("players/"+UID).set({name:n,room:r,biz:"",loc:"",cash:START,round:0,ph:"Menunggu ACC",pol:"",fin:false,t:Date.now()})}
+  try{await DB.doc("players/"+UID).set({name:n,room:r,biz:"",loc:"",cash:START,round:0,ph:"Menunggu ACC",pol:"",fin:false,rg:-1,cg:0,t:Date.now()})}
   catch(e){nerr("Gagal gabung room. Akunmu belum punya akses Contributor.");ME=null;return}
   show("wait");renderWait();
 }
@@ -519,7 +676,7 @@ async function adminLogin(){
   if(!DB){alert("Supabase belum diisi di file HTML.");return}
   const p=prompt("Masukkan PIN admin");if(!p)return;
   const {data}=await SB.rpc("admin_ctl",{pin:p,op:"ping",k:"",d:null});
-  if(data===true){PIN=p;ADM=true;show("admin");renderAdmin()}else alert("PIN salah");
+  if(data===true){PIN=p;ADM=true;ADT=Date.now();show("admin");renderAdmin()}else alert("PIN salah");
 }
 async function initMP(){
   try{UID=localStorage.getItem("ju_uid");if(!UID){UID="p"+Math.random().toString(36).slice(2,10);localStorage.setItem("ju_uid",UID)}}
