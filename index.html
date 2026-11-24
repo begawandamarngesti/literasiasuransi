@@ -258,6 +258,8 @@ body.pz .scene svg *{animation-play-state:paused!important}
 <div id="panel"></div>
 </section>
 
+<section class="scr" id="wait"><h1 id="wh" style="font-size:34px"></h1><div class="mute" style="color:#e3dcff">Lobi room. Hanya pembuat room yang bisa memulai game.</div><div class="box" id="wb" style="margin-top:14px"></div></section>
+
 <section class="scr" id="ready"><h1 style="font-size:36px">Usahamu terkunci</h1><div class="mute" style="color:#e3dcff" id="rst"></div><div class="box" id="rbx" style="margin:14px 0"></div><button class="btn" id="rdy" onclick="iamReady()">SIAP!</button><div class="box" id="rdb" style="margin-top:14px"></div></section>
 
 <section class="scr" id="admin"><h1 style="font-size:36px">Panel Admin</h1><div class="mute" style="color:#e3dcff">Pemain membuat dan bergabung room sendiri. Pilih room di bawah untuk memantau layar tiap pemain (maks. 4 pemain per room).</div><div id="abar"></div><div id="ab"><div class="box" id="noroom" style="margin-top:16px"><div class="mute">Belum ada room yang aktif. Room muncul otomatis saat pemain membuat atau bergabung.</div></div></div></section>
@@ -356,11 +358,17 @@ function typeText(el,txt,ms){
       if(n>=txt.length)res();else requestAnimationFrame(f)})()});
 }
 async function sales(){
-  const pn=(ME&&ME.name)||"kamu",bz=S.b.n,r1=S.round===1,el=$("#nar");
-  const txt=r1?`Di ${bz} milik ${pn}, setiap hari berjalan lancar dan penjualan juga berjalan baik. Tapi ada satu risiko yang harus ${pn} kenali...`:`Hari-hari berikutnya ${bz} milik ${pn} tetap ramai pembeli. Tapi di ${S.loc.n}, ada risiko baru yang harus ${pn} kenali...`;
-  S.ph="Pelanggan berbelanja";S.qd=false;sync();el.style.display="block";
-  await Promise.all([typeText(el,txt,r1?30:24),queue(r1?1:.7)]);
-  await sleep(r1?900:600);el.style.display="none";S.qd=true;
+  S.ph="Pelanggan berbelanja";S.qd=false;sync();
+  if(S.round>1){
+    /* ronde 2-4: pembeli terlihat sekitar 2 detik, lalu tetap berbelanja di latar sambil pemain bermain */
+    S.qp=queue(1).then(()=>{S.qd=true}).catch(()=>{});
+    await sleep(2000);return;
+  }
+  const pn=(ME&&ME.name)||"kamu",bz=S.b.n,el=$("#nar");
+  const txt=`Di ${bz} milik ${pn}, setiap hari berjalan lancar dan penjualan juga berjalan baik. Tapi ada satu risiko yang harus ${pn} kenali...`;
+  el.style.display="block";
+  await Promise.all([typeText(el,txt,30),queue(1)]);
+  await sleep(900);el.style.display="none";S.qd=true;S.qp=Promise.resolve();
 }
 function runTimer(bar,txt,secs,fm,end,key){
   const b=$(bar),x=$(txt),t0=performance.now();let last=-1;
@@ -374,7 +382,6 @@ function runTimer(bar,txt,secs,fm,end,key){
 
 function pick(i){
   S={mp:!!(ME&&ME.mp),b:B[i],cash:START,inc:0,round:0,prem:0,claim:0,lossTot:0,rg:-1,cg:0,locs:[...L].sort(()=>Math.random()-.5).slice(0,RN),log:[]};lg("Membuka usaha "+S.b.n);
-  if(S.mp&&DB){S.ph="Usaha terkunci";sync();showReady();return}
   begin();
 }
 function begin(){
@@ -405,7 +412,7 @@ async function deck(){
   $("#ff").innerHTML=`<div class="eb">Profil Risiko Bisnis</div><h2>${S.loc.n}</h2><p class="nt">Ini adalah keadaan dan profil risiko bisnismu saat ini. Pahami untuk keputusan bisnismu.</p>${S.loc.r.map((k,i)=>`<div class="rk"><span class="ri">${ic(k,24)}</span><div class="rm"><b>${RK[k].n}</b><small>Estimasi kerugian ${est(k)}</small></div><span class="chip l${3-i}">${lv[i]}</span></div>`).join("")}`;
   $("#deck").style.display="flex";
   await sleep(1500);fc.classList.add("in");await sleep(500);fc.classList.add("flip");await sleep(800);
-  $("#dtw").style.display="block";clearInterval(S.dv);runTimer("#dtb","#dt",15,c=>"Lanjut otomatis dalam "+c+" detik",toOffers,"dv");
+  $("#dtw").style.display="block";clearInterval(S.dv);runTimer("#dtb","#dt",S.round===1?15:10,c=>"Lanjut otomatis dalam "+c+" detik",toOffers,"dv");
 }
 function mkOffers(kind){
   const pool=P.filter(p=>p.cl===kind),must=pool.filter(p=>p.cover.includes(S.loc.r[0])),m=must[Math.floor(Math.random()*must.length)];
@@ -436,9 +443,7 @@ async function choose(id){
   const hd=document.querySelector("#panel .hd"),br=document.querySelector("#panel .bar");
   if(hd)hd.innerHTML='<span>Pilihanmu terkunci</span><span>&#10003;</span>';if(br)br.style.display="none";
   document.querySelectorAll("#panel .of").forEach(e=>{if(!e.classList.contains("sel"))e.style.opacity=".4";e.style.pointerEvents="none"});
-  if((S.mp&&DB)||!S.qd)$("#panel").insertAdjacentHTML("beforeend",'<div class="box" id="cgw" style="margin-top:10px"><div class="mute">'+(S.qd?"":"Pelanggan masih berbelanja...")+'</div></div>');
-  await sleep(900);
-  if(!(await gateWait("cg",S.round,"#cgw",45000)))return;
+  await sleep(900);await S.qp;
   playEvent();
 }
 
@@ -507,17 +512,7 @@ async function rebuild(){S.sh="";lg("Membangun kembali usaha");sync();
   sp.setAttribute("class","");sp.animate([{transform:T+" scaleY(.15)"},{transform:T}],{duration:900,easing:"ease-out"});
   await sleep(1000);st(k,"cheer");await sleep(900);nextR();
 }
-const nextR=async()=>{
-  if(S.round>=RN){end();return}
-  if(S.mp&&DB&&ME&&ME.mp){
-    const S0=S;S.ph="Menunggu pemain lain";lg("Ronde "+S.round+" selesai, menunggu pemain lain");
-    $("#gwt").textContent="Ronde "+S.round+" selesai";$("#gwb").className="box";$("#gwb").innerHTML="";$("#gw").classList.add("on");
-    if(!(await gateWait("rg",S.round,"#gwb",90000))||S0.left)return;
-    await flashOv(["Ronde "+(S.round+1)],"Semua pemain siap!",1100);
-    if(S0.left)return;
-  }
-  nextRound();
-};
+const nextR=()=>{if(S.round>=RN){end();return}nextRound()};
 
 function end(){
   clearInterval(S.iv);S.fin=true;S.ph="Selesai";lg("Selesai dengan saldo "+fmt(S.cash));sync();const no=START+FEE*CUST*RN-S.lossTot,fin=S.cash,lost=S.lost||fin<=0,gap=S.lossTot-S.claim;
@@ -530,7 +525,7 @@ function end(){
 }
 
 /* ===== Multiplayer ===== */
-let DB=null,UID=null,ADM=false,PL=[],RC={},ME=null,SEEN={},HB=null,POLL=null,LASTJ="",PQ=0,PA=0,ADR="",SB=null,PIN="";
+let LERR="",DB=null,UID=null,ADM=false,PL=[],RC={},ME=null,SEEN={},HB=null,POLL=null,LASTJ="",PQ=0,PA=0,ADR="",SB=null,PIN="";
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const alive=p=>{const x=SEEN[p.id];return !!x&&Date.now()-x.at<75000};
 const mem=r=>PL.filter(p=>p.room===r&&alive(p)&&p.ph!=="Keluar dari game").sort((a,b)=>(a.jt||0)-(b.jt||0));
@@ -559,7 +554,7 @@ function gateUI(G){
   const L=gateList(G.f,G.g,!G.pre),n=L.filter(x=>x.ok).length;
   const st=x=>x.ok?"Siap":(G.f==="rg"&&G.g===0?(x.biz?"Belum klik siap":"Memilih usaha"):"Masih bermain...");
   const pre0=G.f==="rg"&&G.g===0,solo1=pre0&&L.length<2;
-  el.innerHTML='<div class="eb">'+n+'/'+L.length+' pemain siap'+(pre0?' - Room '+esc(ME.room):'')+'</div>'+(solo1?'<div class="mute" style="margin:6px 0">Menunggu teman bergabung. Bagikan kode room <b>'+esc(ME.room)+'</b> (maks. 4 pemain).</div>':'')+L.map(x=>`<div class="row"><span>${esc(x.name)}${x.self?" (kamu)":""}</span><b class="${x.ok?"good":"mute"}">${st(x)}</b></div>`).join("");
+  el.innerHTML='<div class="eb">'+n+'/'+L.length+' pemain siap'+(pre0?' - Room '+esc(ME.room):'')+'</div>'+'<div class="mute" style="font-size:11px;margin:4px 0">Sinkron: '+esc(LERR||"OK")+' | ID '+esc(UID.slice(-4))+' | pemain terbaca di server: '+PL.length+'</div>'+(solo1?'<div class="mute" style="margin:6px 0">Menunggu teman bergabung. Bagikan kode room <b>'+esc(ME.room)+'</b> (maks. 4 pemain).</div>':'')+L.map(x=>`<div class="row"><span>${esc(x.name)}${x.self?" (kamu)":""}</span><b class="${x.ok?"good":"mute"}">${st(x)}</b></div>`).join("");
   if(!G.pre&&n===L.length&&!solo1)gateDone();
 }
 function gateDone(){const G=S&&S.gcb;if(!G)return;S.gcb=null;clearTimeout(G.to);G.res(true)}
@@ -663,7 +658,20 @@ function mpRender(){
     if(!rc||(rc.kick&&rc.kick[UID])){leave(rc?"Kamu dikeluarkan dari room oleh admin.":"Room sudah ditutup.",true);return}}
   if($("#admin").classList.contains("on"))renderAdmin();
   if($("#end").classList.contains("on"))lb();
-  if(S&&ME&&ME.mp){if(S.gcb)gateUI(S.gcb);else if($("#ready").classList.contains("on"))gateUI({f:"rg",g:0,el:"#rdb",pre:true})}
+  if($("#wait").classList.contains("on"))renderWait();
+}
+function renderWait(){
+  if(!ME||!ME.mp)return;const r=ME.room,rc=RC[r]||{};
+  if(rc.started&&!ME.go){ME.go=true;const M=ME;
+    flashOv(["3","2","1","MULAI!"],"Game dimulai!",700).then(()=>{if(ME!==M)return;$("#hi").textContent="Halo, "+M.name+" - Room "+r;show("start")});return}
+  if(ME.go)return;
+  const m=mem(r),hid=m.some(p=>p.id===rc.host)?rc.host:(m[0]&&m[0].id),host=hid===UID;
+  $("#wh").textContent="Room "+r;
+  setH($("#wb"),`<div class="eb">Kode room (bagikan ke temanmu)</div><div class="rcode" style="text-align:center;margin:4px 0 10px">${esc(r)}</div><div class="eb">Pemain di room (${m.length}/4)</div>${m.map(p=>`<div class="row"><span>${esc(p.name)}${p.id===UID?" (kamu)":""}</span><b class="mute">${p.id===hid?"Pembuat room":""}</b></div>`).join("")}<p class="mute" style="margin:10px 0 0">${host?(m.length<2?"Tunggu minimal 1 teman bergabung.":"Kalau semua sudah masuk, tekan Mulai Game."):"Menunggu pembuat room memulai game..."}</p>${host?`<button class="btn" onclick="startRoom()" ${m.length<2?"disabled":""}>MULAI GAME</button>`:""}`);
+}
+function startRoom(){
+  if(!ME||!ME.mp||!DB)return;const r=ME.room;if(mem(r).length<2)return;
+  const rc={...(RC[r]||{}),started:true};RC[r]=rc;DB.doc("players/rc_"+r).set(rc).catch(()=>{});renderWait();
 }
 function leave(msg,del){
   GEN++;
@@ -683,7 +691,7 @@ function goBack(){
   }
   if(id==="admin"){history.replaceState(null,"",location.pathname+location.search);ADM=false;stopMP();b.textContent="Kembali";show("name");return}
   const rm=ME&&ME.mp?ME.room:null;
-  leave("",id==="start"||id==="ready"||id==="name");
+  leave("",id==="start"||id==="ready"||id==="wait"||id==="name");
   if(rm)setTimeout(()=>{if(DB&&!PL.some(p=>p.room===rm&&p.id!==UID&&alive(p)&&p.ph!=="Keluar dari game"))DB.doc("players/rc_"+rm).delete().catch(()=>{})},700);
   if(!ADM)stopMP();
 }
@@ -713,21 +721,20 @@ async function enterRoom(create){
   await pull();
   if(mem(r).findIndex(p=>p.id===UID)>=4){DB.doc("players/"+UID).delete().catch(()=>{});ME=null;nerr("Room penuh (maks. 4 pemain).");return}
   ME.in=true;hbStart();
-  $("#hi").textContent="Halo, "+n+" - Room "+r+(create?" (bagikan kode ini ke temanmu, maks. 4 pemain)":"");
-  show("start");
+  show("wait");renderWait();
 }
-const baseDoc=()=>({name:ME.name,room:ME.room,jt:ME.jt,biz:"",loc:"",cash:START,round:0,ph:"Memilih usaha",pol:"",fin:false,rg:-1,cg:0,t:Date.now()});
+const baseDoc=()=>({name:ME.name,room:ME.room,jt:ME.jt,biz:"",loc:"",cash:START,round:0,ph:(RC[ME.room]&&RC[ME.room].started)?"Memilih usaha":"Menunggu di lobi",pol:"",fin:false,rg:-1,cg:0,t:Date.now()});
 function hbStart(){if(HB)return;HB=setInterval(()=>{if(!DB||!ME||!ME.mp||!ME.in)return;if(S&&S.mp){if(!S.left)sync()}else DB.doc("players/"+UID).set(baseDoc()).catch(()=>{})},20000)}
 const SUPABASE_URL="https://vrhpucmluflvhafoioqi.supabase.co";   // contoh: https://abcdxyz.supabase.co
 const SUPABASE_KEY="sb_publishable_L8qb6fg21lki7RFsiVRByQ_i-ftSNq8";         // anon public key dari Project Settings > API
 const tb=p=>p.split("/")[0],ky=p=>p.split("/").slice(1).join("/");
 const DBX={doc:p=>({
-  set:async o=>{const {error}=await SB.from("players").upsert({id:ky(p),data:o});if(error)throw error},
-  delete:async()=>{const {error}=await SB.from("players").delete().eq("id",ky(p));if(error)throw error}
+  set:async o=>{const {error}=await SB.from("players").upsert({id:ky(p),data:o});if(error){LERR="tulis: "+(error.message||error.code||"gagal");throw error}},
+  delete:async()=>{const {error}=await SB.from("players").delete().eq("id",ky(p));if(error){LERR="hapus: "+(error.message||error.code||"gagal");throw error}}
 })};
 async function pull(){
-  const q=++PQ;let r;try{r=await SB.from("players").select("id,data")}catch(e){return false}
-  if(r.error||!r.data)return false;if(q<PA)return true;PA=q;
+  const q=++PQ;let r;try{r=await SB.from("players").select("id,data")}catch(e){LERR="baca: "+e;return false}
+  if(r.error||!r.data){LERR="baca: "+((r.error&&(r.error.message||r.error.code))||"kosong");return false}if(q<PA)return true;PA=q;
   const j=JSON.stringify(r.data);if(j===LASTJ)return true;LASTJ=j;
   const a=[],rc={},now=Date.now();
   r.data.forEach(d=>{const v=d.data||{};if(d.id.indexOf("rc_")===0)rc[d.id.slice(3)]=v;else{a.push({id:d.id,...v});const x=SEEN[d.id];if(!x||x.t!==v.t)SEEN[d.id]={t:v.t,at:now}}});
@@ -742,8 +749,7 @@ async function adminLogin(){
   if(data===true){PIN=p;ADM=true;ADT=Date.now();await startMP();cleanOld();show("admin");renderAdmin()}else alert("PIN salah")
 }
 function initMP(){
-  try{UID=localStorage.getItem("ju_uid");if(!UID){UID="p"+Math.random().toString(36).slice(2,10);localStorage.setItem("ju_uid",UID)}}
-  catch(e){UID="p"+Math.random().toString(36).slice(2,10)}
+  UID="p"+Math.random().toString(36).slice(2,8)+Date.now().toString(36).slice(-4);
   if(!window.supabase||SUPABASE_URL.startsWith("ISI")||SUPABASE_KEY.startsWith("ISI"))return;
   SB=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);DB=DBX;
   $("#adl").style.display="block";
