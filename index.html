@@ -545,7 +545,7 @@ async function iamReady(){
   if(S0.left||S!==S0)return;
   begin();
 }
-async function nextRound(){S.round++;S.locked=false;S.cd=0;S.choice=null;S.ek="";S.sh="";S.loss=0;S.cl=0;S.loc=S.locs[S.round-1];lg("Ronde "+S.round+": lokasi "+S.loc.n);resetScene();hud();try{await sales()}catch(e){return}deck()}
+async function nextRound(){$("#panel").innerHTML="";S.round++;S.locked=false;S.cd=0;S.choice=null;S.ek="";S.sh="";S.loss=0;S.cl=0;S.loc=S.locs[S.round-1];lg("Ronde "+S.round+": lokasi "+S.loc.n);resetScene();hud();try{await sales()}catch(e){return}deck()}
 async function deck(){
   const ring=$("#ring"),fc=$("#fc"),lv=["Tinggi","Sedang","Rendah"];
   ring.style.animation="none";void ring.offsetWidth;ring.style.animation="";
@@ -655,7 +655,7 @@ async function rebuild(){AU.sfx("hammer");S.sh="";lg("Membangun kembali usaha");
   sp.setAttribute("class","");sp.animate([{transform:T+" scaleY(.15)"},{transform:T}],{duration:900,easing:"ease-out"});
   await sleep(1000);st(k,"cheer");await sleep(900);nextR();
 }
-const nextR=()=>{if(S.round>=RN){end();return}nextRound()};
+const nextR=()=>{if(S.nr===S.round)return;S.nr=S.round;$("#panel").innerHTML="";if(S.round>=RN){end();return}nextRound()};
 
 function whyIns(){const w=document.getElementById("why"),b=document.getElementById("whyb");if(!w)return;if(b)b.style.display="none";w.style.display="block";w.scrollIntoView({behavior:"smooth",block:"center"});talkEnd.apply(null,window.TKA||[false,false])}
 function talkEnd(lost,hadLoss){
