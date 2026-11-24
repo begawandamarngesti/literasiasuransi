@@ -128,6 +128,25 @@ h1{font-size:52px}.cash{font-size:34px}
 #end{max-width:680px}
 .fc{width:430px;height:450px}#dtw{width:430px}
 }
+
+/* ===== Karakter ngomong di layar akhir ===== */
+.tk{display:flex;align-items:flex-end;gap:10px;margin:14px 0 6px;text-align:left}
+.tk svg{flex:none;overflow:visible}
+.bub{position:relative;flex:1;min-height:72px;background:#fff2c2;border:3px solid #1b1340;border-radius:14px;box-shadow:0 4px 0 #1b1340;padding:10px 12px;font-size:15px;line-height:1.45;font-weight:800;color:#1b1340}
+.bub:before{content:"";position:absolute;left:-9px;bottom:22px;width:12px;height:12px;background:#fff2c2;border-left:3px solid #1b1340;border-bottom:3px solid #1b1340;transform:rotate(45deg)}
+.bub .cur{display:inline-block;width:2px;height:1em;background:#1b1340;margin-left:2px;vertical-align:-2px;animation:cur .7s steps(1) infinite}
+@keyframes cur{50%{opacity:0}}
+.talk .m1{display:none}
+.talk .m2{display:block;transform-box:fill-box;transform-origin:center;animation:mth .2s ease-in-out infinite alternate}
+@keyframes mth{from{transform:scaleY(.25) scaleX(1.1)}to{transform:scaleY(1) scaleX(.9)}}
+.talk .bod{animation:bob .5s ease-in-out infinite}
+.talk .armR{animation:gst .7s ease-in-out infinite alternate}
+.talk .armL{animation:gst2 .9s ease-in-out infinite alternate}
+@keyframes gst{from{transform:rotate(-20deg)}to{transform:rotate(-75deg)}}
+@keyframes gst2{from{transform:rotate(6deg)}to{transform:rotate(28deg)}}
+@media (prefers-reduced-motion:reduce){.talk .m2,.talk .bod,.talk .armR,.talk .armL{animation:none}}
+#snd{position:fixed;left:14px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:60;width:42px;height:42px;border-radius:50%;border:3px solid #1b1340;background:#fff8e7;color:#1b1340;font-size:20px;cursor:pointer;line-height:1;padding:0}
+#snd:focus-visible{outline:3px solid var(--gold)}
 </style><style>
 :root:root:root{color-scheme:light;--bg:#2a1e5c;--card:#fff8e7;--ink:#1b1340;--mute:#5b5480;--pri:#ffb400;--on:#1b1340;--gold:#ff8a00;--ok:#12a150;--bad:#e5383b;--line:#1b1340;--sky1:#3fc1ff;--sky2:#d4f4ff;--ground:#5ccf5a;--m1:#7f93e6}
 body{font-family:Nunito,"Trebuchet MS",system-ui,sans-serif;font-weight:700;color:#fff;background:transparent}html{background:#1a1240}body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(rgba(255,255,255,.07) 2px,transparent 2px) 0 0/28px 28px,radial-gradient(circle at 20% 0,#4a38a8,#2a1e5c 55%,#1a1240);transform:translateZ(0)}
@@ -269,12 +288,135 @@ body.pz .scene svg *{animation-play-state:paused!important}
 <div id="deck"><div class="ring" id="ring"></div><div class="fc" id="fc"><div class="fi"><div class="fa b" id="fb"></div><div class="fa f" id="ff"></div></div></div>
 <div id="dtw" style="display:none"><div class="bar"><i id="dtb"></i></div><button class="btn" id="dn" onclick="toOffers()">Lanjut</button><div id="dt"></div></div></div>
 <div id="dim"></div>
+<button id="snd" onclick="AU.toggle()" aria-label="Matikan suara">🔊</button>
 <div id="sky"></div>
 <div id="gw"><div id="gwt"></div><div id="gwb" class="box"></div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
 const $=s=>document.querySelector(s);let GEN=0;const sleep=ms=>{const g=GEN;return new Promise((r,j)=>setTimeout(()=>g===GEN?r():j("x"),ms))};
+
+/* ===== Musik instrumental (WebAudio, tanpa file) + suara narasi (TTS browser) ===== */
+let TKG=0;
+/* Suara AI natural (opsional): isi API key Google Cloud Text-to-Speech di sini. Batasi key ke domain game-mu (HTTP referrer). Kosong = pakai suara browser. */
+const TTS_KEY="",TTS_VOICE="id-ID-Wavenet-A";
+const AU={ctx:null,mg:null,nb:null,on:true,iv:null,step:0,next:0,vol:.2,sp:false,
+  start(){
+    if(!this.on)return;
+    if(!this.ctx){const C=window.AudioContext||window.webkitAudioContext;if(!C)return;
+      this.ctx=new C();this.mg=this.ctx.createGain();this.mg.gain.value=this.vol;this.mg.connect(this.ctx.destination);
+      const n=this.ctx.sampleRate,b=this.ctx.createBuffer(1,n,n),d=b.getChannelData(0);for(let i=0;i<n;i++)d[i]=Math.random()*2-1;this.nb=b}
+    if(this.ctx.state==="suspended")this.ctx.resume();
+    if(!this.iv){this.next=this.ctx.currentTime+.15;this.iv=setInterval(()=>this.sched(),30)}
+  },
+  f(m){return 440*Math.pow(2,(m-69)/12)},
+  tone(m,t,d,type,v){const c=this.ctx,o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.value=this.f(m);
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+d);
+    o.connect(g);g.connect(this.mg);o.start(t);o.stop(t+d+.05)},
+  kick(t){const c=this.ctx,o=c.createOscillator(),g=c.createGain();o.frequency.setValueAtTime(130,t);o.frequency.exponentialRampToValueAtTime(45,t+.12);
+    g.gain.setValueAtTime(.5,t);g.gain.exponentialRampToValueAtTime(.0001,t+.18);o.connect(g);g.connect(this.mg);o.start(t);o.stop(t+.2)},
+  hat(t,v){const c=this.ctx,s=c.createBufferSource(),h=c.createBiquadFilter(),g=c.createGain();s.buffer=this.nb;h.type="highpass";h.frequency.value=7000;
+    g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+.05);s.connect(h);h.connect(g);g.connect(this.mg);s.start(t);s.stop(t+.06)},
+  sched(){
+    const c=this.ctx;if(!c)return;const E=60/104/2;
+    while(this.next<c.currentTime+.25){
+      const k=this.step,bar=Math.floor(k/8)%4,i=k%8,t=this.next;
+      const CH=[[60,64,67],[55,59,62],[57,60,64],[53,57,60]][bar],BS=[36,31,33,29][bar];
+      const arp=[0,1,2,1,0,1,2,1][i];
+      this.tone(CH[arp]+12,t,.45,"triangle",.16);
+      if(i===0||i===4)this.tone(BS,t,.5,"sine",.32);
+      if(i===0)this.tone(CH[0]+12,t,2.2,"sine",.07);
+      if(i===0||i===4)this.kick(t);
+      if(i%2===1)this.hat(t,.05);
+      const P=[72,74,76,79,81];
+      if(i===0||i===3||i===6){const r=(k*7+bar*3)%5;if(((k>>3)%2===1)||i===0)this.tone(P[r],t,.4,"sine",.1)}
+      this.next+=E;this.step=(this.step+1)%32;
+    }
+  },
+  duck(on){if(this.mg)this.mg.gain.setTargetAtTime(this.on?(on?.06:this.vol):0,this.ctx.currentTime,.15)},
+  toggle(){
+    this.on=!this.on;if(this.sg)this.sg.gain.value=this.on?.7:0;
+    if(this.on){this.start();this.duck(this.sp)}else{this.duck(false);this.stopVoice();if(this.mg)this.mg.gain.value=0}
+    const b=document.getElementById("snd");if(b){b.textContent=this.on?"🔊":"🔇";b.setAttribute("aria-label",this.on?"Matikan suara":"Nyalakan suara")}
+  },
+  cache:{},au:null,
+  stopVoice(){try{window.speechSynthesis&&speechSynthesis.cancel()}catch(e){}if(this.au){try{this.au.pause()}catch(e){}this.au=null}this.sp=false;this.duck(false)},
+  voices(){return new Promise(r=>{const g=()=>speechSynthesis.getVoices();let v=g();if(v.length)return r(v);
+    const h=()=>r(g());speechSynthesis.addEventListener("voiceschanged",h,{once:true});setTimeout(()=>r(g()),1200)})},
+  best(vs){
+    const id=vs.filter(x=>/^id([-_]|$)/i.test(x.lang));if(!id.length)return null;
+    const sc=x=>(/natural|neural|online/i.test(x.name)?100:0)+(/google/i.test(x.name)?50:0)+(/gadis|damayanti|female|wanita/i.test(x.name)?10:0)+(x.localService?0:5);
+    return id.sort((a,b)=>sc(b)-sc(a))[0];
+  },
+  /* Opsional: suara AI natural via Google Cloud Text-to-Speech. Isi TTS_KEY di bagian atas script untuk mengaktifkan. */
+  cloud(txt){
+    if(this.cache[txt])return this.cache[txt];
+    return this.cache[txt]=fetch("https://texttospeech.googleapis.com/v1/text:synthesize?key="+encodeURIComponent(TTS_KEY),{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({input:{text:txt},voice:{languageCode:"id-ID",name:TTS_VOICE},audioConfig:{audioEncoding:"MP3",speakingRate:1.0,pitch:0}})})
+      .then(r=>r.json()).then(j=>{if(!j.audioContent)throw new Error("tts");return"data:audio/mp3;base64,"+j.audioContent});
+  },
+  pre(txt){if(TTS_KEY&&this.on)this.cloud(txt).catch(()=>{delete this.cache[txt]})},
+  speak(txt){
+    return new Promise(async res=>{
+      if(!this.on)return res();
+      this.stopVoice();
+      let done=false;const fin=()=>{if(done)return;done=true;this.sp=false;this.duck(false);res()};
+      setTimeout(fin,40000);
+      if(TTS_KEY){
+        try{
+          const url=await this.cloud(txt);if(done)return;
+          const a=new Audio(url);this.au=a;a.onplay=()=>{this.sp=true;this.duck(true)};a.onended=fin;a.onerror=fin;await a.play();return;
+        }catch(e){delete this.cache[txt]}
+      }
+      try{
+        if(!window.speechSynthesis||!window.SpeechSynthesisUtterance)return fin();
+        const vs=await this.voices();if(done)return;
+        const v=this.best(vs),nat=v&&/natural|neural|online|google/i.test(v.name);
+        const parts=txt.split(/(?<=[.!?])\s+/).filter(Boolean);
+        speechSynthesis.cancel();
+        parts.forEach((q,i)=>{
+          const u=new SpeechSynthesisUtterance(q);u.lang="id-ID";if(v)u.voice=v;
+          u.rate=nat?1:.93;u.pitch=nat?1:1.08;
+          if(i===0)u.onstart=()=>{this.sp=true;this.duck(true)};
+          u.onerror=()=>{if(i===parts.length-1)fin()};
+          if(i===parts.length-1)u.onend=fin;
+          speechSynthesis.speak(u);
+        });
+      }catch(e){fin()}
+    });
+  }};
+["pointerdown","keydown"].forEach(e=>document.addEventListener(e,()=>AU.start(),{passive:true}));
+
+/* ===== Efek suara bencana (sintesis WebAudio) ===== */
+AU.bus=function(){if(!this.ctx)return null;if(!this.sg){this.sg=this.ctx.createGain();this.sg.gain.value=.7;this.sg.connect(this.ctx.destination)}return this.sg};
+AU.nz=function(t,d,o){o=o||{};const c=this.ctx,s=c.createBufferSource(),fl=c.createBiquadFilter(),g=c.createGain(),v=o.v==null?.3:o.v,a=o.a==null?.1:o.a;
+  s.buffer=this.nb;s.loop=true;fl.type=o.type||"lowpass";fl.frequency.setValueAtTime(o.f||1000,t);if(o.f2)fl.frequency.linearRampToValueAtTime(o.f2,t+d);fl.Q.value=o.q||1;
+  g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v,t+a);g.gain.setValueAtTime(v,t+Math.max(a,d-.4));g.gain.linearRampToValueAtTime(.0001,t+d);
+  s.connect(fl);fl.connect(g);g.connect(this.bus());s.start(t);s.stop(t+d+.05)};
+AU.pp=function(t,v,f){const c=this.ctx,s=c.createBufferSource(),b=c.createBiquadFilter(),g=c.createGain();s.buffer=this.nb;b.type="bandpass";b.frequency.value=f||2500;b.Q.value=1;
+  g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+.05);s.connect(b);b.connect(g);g.connect(this.bus());s.start(t,Math.random()*.8,.06)};
+AU.bt=function(t,f,d,type,v,f2){const c=this.ctx,o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);
+  g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v,t+.01);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(this.bus());o.start(t);o.stop(t+d+.05)};
+AU.sfx=function(n){
+  if(!this.on||!this.ctx||!this.nb)return;try{
+  if(this.ctx.state==="suspended")this.ctx.resume();
+  const t=this.ctx.currentTime+.03,R=Math.random;let D=0,i;
+  if(n==="banjir"){D=4.4;this.nz(t,D,{type:"highpass",f:2200,v:.22,a:.4});this.nz(t,D,{type:"lowpass",f:320,v:.35,a:2.4});this.nz(t,1.8,{f:200,v:.5,a:.05});for(i=0;i<34;i++)this.pp(t+R()*D,.12,3000+R()*3000)}
+  else if(n==="kebakaran"){D=3.4;this.nz(t,D,{f:700,v:.25,a:.5});this.nz(t,D,{type:"bandpass",f:900,f2:600,q:.8,v:.12,a:.6});for(i=0;i<50;i++)this.pp(t+R()*D,.18+R()*.25,1500+R()*3500)}
+  else if(n==="gunung"){D=3.6;this.nz(t,D,{f:150,v:.55,a:.3});this.bt(t,48,D,"sine",.25,30);this.nz(t+.25,1.6,{f:1300,f2:120,v:.6,a:.02});this.bt(t+.25,95,.7,"sine",.7,35);for(i=0;i<8;i++)this.pp(t+1+R()*2,.2,600+R()*900)}
+  else if(n==="gempa"){D=3.2;this.nz(t,D,{f:95,v:.7,a:.2});for(i=0;i<26;i++)this.bt(t+i*.12,55+R()*10,.14,"sine",.25);for(i=0;i<14;i++)this.pp(t+.3+R()*2.6,.18,800+R()*1500)}
+  else if(n==="angin"){D=3.8;this.nz(t,D,{type:"bandpass",f:400,f2:1400,q:4,v:.35,a:1.2});this.nz(t,D,{type:"bandpass",f:900,f2:500,q:6,v:.2,a:1.4});this.bt(t+.6,700,2.6,"sine",.05,1100)}
+  else if(n==="pencurian"){D=4.6;for(i=0;i<4;i++){this.bt(t+i*.38,120,.12,"sine",.3,60);this.pp(t+i*.38,.08,500)}
+    this.nz(t+1.8,.5,{type:"highpass",f:5000,v:.5,a:.01});for(i=0;i<6;i++)this.pp(t+1.8+i*.05,.3,5000+R()*3000);
+    for(i=0;i<5;i++){this.bt(t+2.3+i*.36,880,.17,"square",.1);this.bt(t+2.48+i*.36,620,.17,"square",.1)}
+    for(i=0;i<8;i++)this.bt(t+3.3+i*.16,130,.08,"sine",.25,70)}
+  else if(n==="coin"){this.bt(t,1318,.25,"sine",.35);this.bt(t+.1,1760,.55,"sine",.35)}
+  else if(n==="hammer"){for(i=0;i<4;i++){this.bt(t+i*.24,230,.09,"triangle",.4,110);this.pp(t+i*.24,.2,1800)}}
+  else if(n==="aman"){[523,659,784,1046].forEach((f,j)=>this.bt(t+j*.12,f,.35,"sine",.25))}
+  if(D>1){this.duck(true);clearTimeout(this.dt);this.dt=setTimeout(()=>this.duck(this.sp),D*1000)}
+  }catch(e){}
+};
+document.addEventListener("visibilitychange",()=>{if(!AU.ctx)return;document.hidden?AU.ctx.suspend():(AU.on&&AU.ctx.resume())});
 const fmt=n=>(n<0?"-":"")+"Rp"+Math.abs(Math.round(n)).toLocaleString("id-ID");
 const sn=n=>n>=1e6?(Math.round(n/1e5)/10+"").replace(".",",")+" jt":Math.round(n/1e3)+" rb";
 const RN=4,CUST=4,FEE=5e5,START=6e6;
@@ -310,7 +452,7 @@ const st=(e,c)=>e.querySelector(".pp").setAttribute("class","pp "+c);
 $("#lg").innerHTML=ic("shield",54);$("#lg2").innerHTML=ic("shield",54);
 $("#bizlist").innerHTML=B.map((b,i)=>`<button class="biz" onclick="pick(${i})"><svg viewBox="0 0 40 80" width="34" height="68"><g class="pp idle">${ppl(b.c,{pants:"#3b3b4f"})}</g></svg>${b.n}</button>`).join("");
 $("#sky").innerHTML=ic("shield",70);
-const show=id=>{document.querySelectorAll(".scr").forEach(e=>e.classList.toggle("on",e.id===id));$("#bk").style.visibility=id==="name"?"hidden":"visible"};
+const show=id=>{if(id!=="end"){TKG++;AU.stopVoice()}document.querySelectorAll(".scr").forEach(e=>e.classList.toggle("on",e.id===id));$("#bk").style.visibility=id==="name"?"hidden":"visible"};
 function sky(cb){const o=$("#sky");o.classList.add("on");setTimeout(cb,650);setTimeout(()=>o.classList.remove("on"),1500)}
 const btn=(t,f)=>`<button class="btn" onclick="${f}">${t}</button>`;
 function pop(t,c){const e=document.createElement("span");e.className="pop "+c;e.textContent=t;e.style.marginLeft=(Math.random()*40-20)+"px";$("#scene").appendChild(e);setTimeout(()=>e.remove(),1700)}
@@ -367,7 +509,7 @@ async function sales(){
   const pn=(ME&&ME.name)||"kamu",bz=S.b.n,el=$("#nar");
   const txt=`Di ${bz} milik ${pn}, setiap hari berjalan lancar dan penjualan juga berjalan baik. Tapi ada satu risiko yang harus ${pn} kenali...`;
   el.style.display="block";
-  await Promise.all([typeText(el,txt,30),queue(1)]);
+  await Promise.all([typeText(el,txt,30),queue(1),AU.speak(txt)]);
   await sleep(900);el.style.display="none";S.qd=true;S.qp=Promise.resolve();
 }
 function runTimer(bar,txt,secs,fm,end,key){
@@ -403,7 +545,7 @@ async function iamReady(){
   if(S0.left||S!==S0)return;
   begin();
 }
-async function nextRound(){S.round++;S.locked=false;S.choice=null;S.ek="";S.sh="";S.loss=0;S.cl=0;S.loc=S.locs[S.round-1];lg("Ronde "+S.round+": lokasi "+S.loc.n);resetScene();hud();try{await sales()}catch(e){return}deck()}
+async function nextRound(){S.round++;S.locked=false;S.cd=0;S.choice=null;S.ek="";S.sh="";S.loss=0;S.cl=0;S.loc=S.locs[S.round-1];lg("Ronde "+S.round+": lokasi "+S.loc.n);resetScene();hud();try{await sales()}catch(e){return}deck()}
 async function deck(){
   const ring=$("#ring"),fc=$("#fc"),lv=["Tinggi","Sedang","Rendah"];
   ring.style.animation="none";void ring.offsetWidth;ring.style.animation="";
@@ -448,6 +590,7 @@ async function choose(id){
 }
 
 async function fx(ev){
+  AU.sfx(ev);
   const f=$("#fx"),k=$("#keeper"),sp=$("#shop"),svg=$("#scn"),T="translate(100px,70px)";
   const tint=c=>`<rect class="tint" width="400" height="260" fill="${c}"/>`,R=(n,fn)=>[...Array(n)].map((_,i)=>fn(i)).join("");
   const tilt=n=>sp.animate([{transform:T},{transform:T+" rotate(-5deg)"},{transform:T+" rotate(5deg)"},{transform:T}],{duration:700,iterations:n});
@@ -486,7 +629,7 @@ async function fx(ev){
 async function playEvent(){
   const ev=S.ev,k=$("#keeper");$("#panel").innerHTML="";ov(false);S.ph=ev==="aman"?"Ronde aman":"Terkena "+RK[ev].n;S.ek=S.round+"-"+ev;lg(ev==="aman"?"Ronde aman, tidak ada musibah":"Kejadian: "+RK[ev].n);sync();await sleep(500);
   if(ev==="aman"){
-    st(k,"cheer");await sleep(1500);
+    st(k,"cheer");AU.sfx("aman");await sleep(1500);
     $("#panel").innerHTML=`<div class="box"><div class="big">${ic("sun",44)}</div><h2>Ronde ini aman</h2><div class="mute">Tidak ada musibah. Tapi premi tetap sudah kamu bayar, dan musibah tidak bisa ditebak.</div>${btn("Lanjut","nextR()")}</div>`;return;
   }
   await fx(ev);S.sh=ev==="kebakaran"?"burnt":ev==="pencurian"?"":"dmg";
@@ -496,17 +639,17 @@ async function playEvent(){
     $("#panel").innerHTML=`<div class="box">${hdr}${btn("Ajukan klaim","claim()")}</div>`;
   }else{
     S.cash-=S.loss;lg("Tanpa perlindungan, rugi "+fmt(S.loss)+" ditanggung sendiri");hud();pop("-"+sn(S.loss),"bad");
-    $("#panel").innerHTML=`<div class="box">${hdr}<div class="row"><span>Kamu tanggung sendiri</span><b class="bad">${fmt(S.loss)}</b></div>${S.cash<=0?lose():btn("Bangun kembali","rebuild()")}</div>`;
+    $("#panel").innerHTML=`<div class="box">${hdr}<div class="row"><span>Kamu tanggung sendiri</span><b class="bad">${fmt(S.loss)}</b></div>${p.id!=="none"?`<p class="mute">Polis ${p.n} hanya menanggung ${p.cover.map(k=>RK[k].n).join(", ")}. ${r.n} tidak termasuk, jadi tidak ada klaim dan premi ${fmt(p.prem)} tidak kembali.</p>`:""}${S.cash<=0?lose():btn("Bangun kembali","rebuild()")}</div>`;
   }
 }
-function claim(){
+function claim(){if(S.cd)return;S.cd=1;AU.sfx("coin");
   const r=RK[S.ev],p=S.choice,flat=p.cl==="flat",cl=flat?p.lim:Math.min(S.loss,p.lim),d=cl-S.loss;
   S.claim+=cl;S.cash+=d;S.cl=cl;lg("Klaim cair "+fmt(cl)+(d<0?", sisa "+fmt(-d)+" ditanggung sendiri":d>0?", kelebihan "+fmt(d):""));hud();st($("#keeper"),d<0?"sad":"cheer");pop(d>=0?"+"+sn(d):"-"+sn(-d),d>=0?"good":"bad");
   const note=flat?(d>0?"Santunan tetap lebih besar dari kerugian, selisihnya jadi keuntungan.":d<0?"Santunan tetap lebih kecil dari kerugian, sisanya kamu tanggung.":"Santunan pas dengan kerugian."):(d<0?"Kerugian melewati limit, sisanya kamu tanggung.":"Kerugian diganti penuh sesuai kerugian nyata.");
   $("#panel").innerHTML=`<div class="box"><div class="row"><span>Kerugian aktual</span><b>${fmt(S.loss)}</b></div><div class="row"><span>${flat?"Santunan tetap":"Ganti rugi (maks. "+sn(p.lim)+")"}</span><b class="good">${fmt(cl)}</b></div><div class="row"><span>${d>=0?"Kelebihan klaim":"Kamu tanggung"}</span><b class="${d>=0?"good":"bad"}">${fmt(Math.abs(d))}</b></div><p class="mute">${note}</p>${S.cash<=0?lose():btn("Bangun kembali","rebuild()")}</div>`;
 }
 const lose=()=>{S.lost=true;lg("Usaha bangkrut");sync();return `<p class="bad"><b>Usahamu bangkrut</b></p>${btn("Lihat hasil","end()")}`};
-async function rebuild(){S.sh="";lg("Membangun kembali usaha");sync();
+async function rebuild(){AU.sfx("hammer");S.sh="";lg("Membangun kembali usaha");sync();
   $("#panel").innerHTML="";const k=$("#keeper"),sp=$("#shop"),T="translate(100px,70px)";
   st(k,"hammer");await sleep(1100);
   sp.setAttribute("class","");sp.animate([{transform:T+" scaleY(.15)"},{transform:T}],{duration:900,easing:"ease-out"});
@@ -514,14 +657,39 @@ async function rebuild(){S.sh="";lg("Membangun kembali usaha");sync();
 }
 const nextR=()=>{if(S.round>=RN){end();return}nextRound()};
 
+function whyIns(){const w=document.getElementById("why"),b=document.getElementById("whyb");if(!w)return;if(b)b.style.display="none";w.style.display="block";w.scrollIntoView({behavior:"smooth",block:"center"});talkEnd.apply(null,window.TKA||[false,false])}
+function talkEnd(lost,hadLoss){
+  const g=++TKG;
+  const L=[
+    lost?"Usahamu bangkrut gara-gara satu musibah. Itu alasan kenapa asuransi penting!":hadLoss?"Musibah itu nggak bisa ditebak. Untung ada asuransi yang bantu nanggung kerugian.":"Kali ini aman. Tapi musibah datang tanpa permisi, jadi siap-siap dari sekarang.",
+    "Asuransi itu bukan buang-buang uang. Premi kecil melindungi modal usahamu yang besar.",
+    "Pertama, melindungi aset dan modal. Asuransi menanggung kerugian saat bangunan, mesin, stok barang, atau kendaraan operasional rusak karena kebakaran, bencana alam, atau pencurian.",
+    "Kedua, menjaga keberlangsungan usaha. Asuransi membantu menutup biaya operasional dan kehilangan pendapatan saat usahamu harus berhenti sementara karena musibah.",
+    "Ketiga, melindungi pemilik dan karyawan. Biaya medis, kecelakaan kerja, dan santunan jiwa ditanggung, jadi tim tetap produktif dan keluarga punya jaminan finansial.",
+    "Jadi, jangan tunggu rugi dulu. Asuransi itu penting, lindungi usahamu dari sekarang!"
+  ];
+  const t=document.getElementById("tkt"),p=document.getElementById("tkp");if(!t||!p)return;
+  const ok=()=>g===TKG&&document.getElementById("tkt");
+  let i=0;
+  (async function say(){
+    if(!ok())return;
+    const txt=L[i%L.length];let n=0,fin=false;t.textContent="";p.setAttribute("class","pp talk");
+    const sp=AU.speak(txt).then(()=>{fin=true});AU.pre(L[(i+1)%L.length]);
+    await new Promise(r=>(function ty(){if(!ok())return r();n++;t.textContent=txt.slice(0,n);n<txt.length?setTimeout(ty,38):r()})());
+    if(!ok())return;
+    await Promise.race([sp,new Promise(r=>setTimeout(r,22000))]);
+    if(!ok())return;
+    p.setAttribute("class","pp idle");i++;setTimeout(say,1200);
+  })();
+}
 function end(){
   clearInterval(S.iv);S.fin=true;S.ph="Selesai";lg("Selesai dengan saldo "+fmt(S.cash));sync();const no=START+FEE*CUST*RN-S.lossTot,fin=S.cash,lost=S.lost||fin<=0,gap=S.lossTot-S.claim;
   const rank=lost?"Bangkrut":fin<9e6?"Bertahan":fin<13e6?"Pengusaha Handal":"Juragan UMKM";
   const msg=lost?"Tanpa perlindungan yang tepat, satu musibah bisa menghabiskan modal.":S.lossTot===0?"Tidak ada musibah kali ini. Lain kali belum tentu.":fin>=no?"Asuransi menyelamatkan "+fmt(fin-no)+" dibanding tanpa asuransi.":"Hasilmu "+fmt(no-fin)+" di bawah skenario tanpa asuransi. Cocokkan jenis polis (flat atau non-flat) dengan risiko lokasimu.";
   $("#endbox").innerHTML=`<div class="box" style="margin-top:20px"><div class="big">${ic(lost?"none":"shield",56)}</div><h1>${rank}</h1><div class="cash">${fmt(fin)}</div><div class="rule" style="margin:10px auto"></div>
 <div class="row"><span>Pendapatan dari pelanggan</span><b class="good">${fmt(S.inc)}</b></div><div class="row"><span>Premi dibayar</span><b>${fmt(S.prem)}</b></div><div class="row"><span>Kerugian aktual total</span><b class="bad">${fmt(S.lossTot)}</b></div><div class="row"><span>Klaim cair</span><b class="good">${fmt(S.claim)}</b></div><div class="row"><span>${gap>=0?"Ditanggung sendiri":"Kelebihan klaim"}</span><b class="${gap>0?"bad":"good"}">${fmt(Math.abs(gap))}</b></div><div class="row"><span>Hasil tanpa asuransi</span><b>${fmt(no)}</b></div>
-<p>${msg}</p>${S.mp?'<div id="lbx"></div>':btn("Main lagi","show('name')")}</div>`;
-  show("end");lb();
+<p>${msg}</p><button class="btn" id="whyb" onclick="whyIns()">Kenapa asuransi penting?</button><div id="why" style="display:none"><div class="tk"><svg viewBox="0 0 40 80" width="64" height="128" aria-hidden="true"><g class="pp idle" id="tkp">${ppl(S.b.c,{pants:"#3b3b4f"})}</g></svg><div class="bub" aria-live="polite"><span id="tkt"></span><i class="cur"></i></div></div></div>${S.mp?'<div id="lbx"></div>':btn("Main lagi","show('name')")}</div>`;
+  show("end");lb();window.TKA=[lost,S.lossTot>0];
 }
 
 /* ===== Multiplayer ===== */
